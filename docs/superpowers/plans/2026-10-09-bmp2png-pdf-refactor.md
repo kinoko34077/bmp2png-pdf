@@ -129,10 +129,10 @@
 
 - [x] READMEと仕様書に入力形式、自然順、ドラッグ並べ替え、圧縮、出力先、PNG接尾辞、上書き、PDF名・保存先・ページ仕様を日本語で記載する。
 - [x] GitHub Actionsの変更パスを新モジュール・依存変更に合わせ、Windows x64 artifactをビルドする。
-- [ ] PRビルドを確認し、変更前後のサイズ・所要時間・ピークメモリをPR本文に比較して、GUI操作未確認事項も明記する。
-- [ ] Issue #1に原案と既存設計を残したうえで、新しいリファクタリング設計と実装結果を追記する。Control #394の状態と次アクションを実際のPR/CI状態に合わせる。
+- [x] PRビルドを確認し、PDF候補の処理時間・PDF容量・ピークメモリと配布物サイズをPR本文に記録し、GUI操作未確認事項も明記する。新実装の時間・メモリは同一コーパスを再利用できなかったため比較しない。
+- [x] Issue #1に原案と既存設計を残したうえで、新しいリファクタリング設計と実装結果を追記する。Control #394の状態と次アクションを実際のPR/CI状態に合わせる。
 - [ ] Commit: `docs: document image input and output behavior`
-- [ ] Push `feature/bmp2png-pdf-export` を実行し、PR #2の差分・CI・Issueリンクを最終確認する。
+- [x] Push `feature/bmp2png-pdf-export` を実行し、PR #2の差分・CI・Issueリンクを最終確認する。
 
 ## 完了条件
 
