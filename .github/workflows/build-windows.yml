@@ -2,6 +2,16 @@ name: Windows portable build
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "bmp2png_pdf.spec"
+      - "bmp_to_png_gui.py"
+      - "image_processing.py"
+      - "requirements*.txt"
+      - ".github/workflows/build-windows.yml"
+
+permissions:
+  contents: read
 
 jobs:
   build:
