@@ -1,0 +1,24 @@
+name: Windows portable build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          architecture: x64
+      - name: Install build dependencies
+        run: python -m pip install -r requirements-build.txt
+      - name: Build portable folder
+        run: pyinstaller --noconfirm bmp2png_pdf.spec
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bmp2png_pdf-windows-x64
+          path: dist/bmp2png_pdf/
+          if-no-files-found: error
