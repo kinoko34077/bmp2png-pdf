@@ -74,8 +74,6 @@ class BmpToPngApp:
         self.pdf_check.pack(side="left")
         self.pdf_name_entry = ttk.Entry(pdf_row, textvariable=self.pdf_name_var, state="disabled")
         self.pdf_name_entry.pack(side="left", fill="x", expand=True, padx=8)
-        self.pdf_button = ttk.Button(pdf_row, text="保存先…", command=self.choose_pdf_name, state="disabled")
-        self.pdf_button.pack(side="left")
 
         bottom = ttk.Frame(self.root)
         bottom.pack(fill="x", padx=18, pady=(0, 12))
@@ -174,18 +172,6 @@ class BmpToPngApp:
     def _toggle_pdf_name(self) -> None:
         state = "normal" if self.pdf_enabled_var.get() else "disabled"
         self.pdf_name_entry.configure(state=state)
-        self.pdf_button.configure(state=state)
-
-    def choose_pdf_name(self) -> None:
-        name = self.pdf_name_var.get().strip() or "まとめ.pdf"
-        path = filedialog.asksaveasfilename(
-            title="PDFの保存先を選択",
-            initialfile=name,
-            defaultextension=".pdf",
-            filetypes=[("PDF files", "*.pdf")],
-        )
-        if path:
-            self.pdf_name_var.set(Path(path).name)
 
     def _pdf_output_path(self) -> Path | None:
         raw_name = self.pdf_name_var.get().strip()
