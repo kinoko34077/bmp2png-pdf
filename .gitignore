@@ -1,0 +1,10 @@
+.venv-build/
+.temp-build/
+.nuitka-cache/
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.build/
+*.dist/
+*.onefile-build/
