@@ -1,2 +1,2 @@
 -r requirements.txt
-nuitka>=2.7,<3.0
+pyinstaller>=6.0.0,<7.0
