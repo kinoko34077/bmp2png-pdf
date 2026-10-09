@@ -7,6 +7,8 @@ on:
       - "bmp2png_pdf.spec"
       - "bmp_to_png_gui.py"
       - "image_processing.py"
+      - "conversion_service.py"
+      - "pdf_export.py"
       - "requirements*.txt"
       - ".github/workflows/build-windows.yml"
 
