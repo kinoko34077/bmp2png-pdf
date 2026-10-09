@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import tempfile
+from io import BytesIO
 from pathlib import Path
 from typing import Sequence
 
@@ -56,8 +57,8 @@ def create_combined_pdf(png_paths: Sequence[Path], output_path: Path) -> Path:
                 page_width, page_height = page_size
                 pdf.setPageSize(page_size)
 
-                # Keep all source pixels in the PDF image XObject. Placement may
-                # shrink to fit the physical page; the raster itself is untouched.
+                # Keep every source pixel in the PDF image XObject. Placement may
+                # shrink to fit the page; the raster itself is not resampled.
                 natural_width = pixel_width * 72.0 / dpi_x
                 natural_height = pixel_height * 72.0 / dpi_y
                 available_width = page_width - 2 * margin
@@ -85,7 +86,7 @@ def create_combined_pdf(png_paths: Sequence[Path], output_path: Path) -> Path:
 
         pdf.save()
 
-        reader = PdfReader(str(temporary_path))
+        reader = PdfReader(BytesIO(temporary_path.read_bytes()))
         writer = PdfWriter()
         writer.append(reader)
         writer.set_page_layout("/SinglePage")
