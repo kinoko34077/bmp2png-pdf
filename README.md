@@ -25,7 +25,7 @@ py bmp_to_png_gui.py
 
 ## Windows x64向け単体アプリ
 
-利用者はGitHub Actionsが作成した `bmp2png_pdf.exe` をダウンロードして起動します。インストールや管理者権限は不要で、Pythonやネット接続も使いません。最初の起動時にプログラム本体をユーザー別の `%LOCALAPPDATA%` キャッシュへ展開し、次回以降は同じ版のキャッシュを再利用します。更新版は別フォルダーに展開されます。古いキャッシュが不要になったら、アプリを閉じてから `%LOCALAPPDATA%\kinoko34077\bmp2png-pdf` 内の古い版フォルダーを削除できます。
+利用者はGitHub Actionsが作成した `bmp2png_pdf.exe` をダウンロードして起動します。インストールや管理者権限は不要で、Pythonやネット接続も使いません。Nuitka one-file形式のため、起動時にプログラム本体の展開処理があります。展開先はユーザー別の `%LOCALAPPDATA%\kinoko34077\bmp2png-pdf\<version>` に固定しますが、これが次回起動の高速化を保証するわけではありません。初回と次回の起動時間は未測定です。古い版の展開データが不要になったら、アプリを閉じてから `%LOCALAPPDATA%\kinoko34077\bmp2png-pdf` 内の古い版フォルダーを削除できます。
 
 ## Windows x64向けビルド
 
