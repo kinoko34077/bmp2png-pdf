@@ -7,7 +7,7 @@ from pathlib import Path
 from PIL import Image
 
 
-SUPPORTED_SUFFIXES = {".bmp", ".png"}
+SUPPORTED_SUFFIXES = frozenset({".bmp", ".png"})
 
 
 def convert_image_to_png(
