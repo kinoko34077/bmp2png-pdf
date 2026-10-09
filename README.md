@@ -23,16 +23,22 @@ py bmp_to_png_gui.py
 
 または `gui.bat` を起動します。TkinterはPython for Windowsに付属するものを使います。
 
-## Windows x64向けポータブル版のビルド
+## Windows x64向け単体アプリ
 
-ビルドするPCにPython 3.12以降が必要です。
+利用者はGitHub Actionsが作成した `bmp2png_pdf.exe` をダウンロードして起動します。インストールや管理者権限は不要で、Pythonやネット接続も使いません。最初の起動時にプログラム本体をユーザー別の `%LOCALAPPDATA%` キャッシュへ展開し、次回以降は同じ版のキャッシュを再利用します。更新版は別フォルダーに展開されます。古いキャッシュが不要になったら、アプリを閉じてから `%LOCALAPPDATA%\kinoko34077\bmp2png-pdf` 内の古い版フォルダーを削除できます。
+
+## Windows x64向けビルド
+
+GitHub Actionsの「Windows single-file portable build」を実行すると、Artifactとして `bmp2png_pdf.exe` を作成します。ローカルでビルドする場合はPython 3.12とネット接続が必要です。Nuitkaが対応するMinGW64コンパイラーをリポジトリ内のキャッシュへ取得するため、Visual Studioや管理者権限は不要です。
 
 ```powershell
-py -m pip install -r requirements-build.txt
-pyinstaller --noconfirm bmp2png_pdf.spec
+py -3.12 -m venv .venv-build
+.\.venv-build\Scripts\Activate.ps1
+python -m pip install -r requirements-build.txt
+.\build_windows.ps1
 ```
 
-作成された `dist/bmp2png_pdf/` フォルダーを一緒に配布してください。アプリ利用者はPythonやネット接続なしで起動できます。GitHub Actionsの「Windows portable build」は手動実行で同じフォルダーをArtifactとして作ります。Release公開はこの手順に含みません。
+生成物は `dist/bmp2png_pdf.exe` です。アプリ利用者にCコンパイラーは不要です。GitHub Releaseへの恒久公開はこの手順に含みません。
 
 ## 仕様と開発
 
