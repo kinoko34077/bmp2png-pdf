@@ -37,7 +37,7 @@ BMPとPNGを可逆圧縮PNGに変換するWindowsデスクトップアプリで�
 
 - Python 3.12、Tkinter、tkinterdnd2、Pillow、ReportLab、pypdfを使用します。
 - PDFライブラリ比較ではimg2pdfが高速・小容量でしたが、追加依存が約20.9MiBとなるため、配布物を軽く保つ目的でReportLab+pypdfを採用します。
-- Nuitka one-file形式でWindows x64向けの単一EXEを作ります。初回起動時の展開先は `%LOCALAPPDATA%\kinoko34077\bmp2png-pdf\<version>` とし、同じ版では展開済みキャッシュを再利用します。更新版は異なる版フォルダーを使います。アプリ利用者に管理者権限、Python、Cコンパイラー、ネット接続は不要です。
+- Nuitka one-file形式でWindows x64向けの単一EXEを作ります。展開先は `%LOCALAPPDATA%\kinoko34077\bmp2png-pdf\<version>` に固定し、更新版は異なる版フォルダーを使います。one-fileは起動時に展開処理があり、固定先の使用だけでは2回目以降の高速化を保証しません。実機での起動時間は未測定です。アプリ利用者に管理者権限、Python、Cコンパイラー、ネット接続は不要です。
 - ビルド側はPython 3.12とネット接続を使い、Nuitka対応のMinGW64コンパイラーを取得します。コンパイラーはリポジトリ内キャッシュに置きます。GitHub Actionsでも同じビルドスクリプトを使います。
 - ライセンスは未選択です。GitHub Releaseやバイナリ公開はdevflowの公開ゲートに従い別途行います。
 
