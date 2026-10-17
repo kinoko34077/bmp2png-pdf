@@ -333,7 +333,7 @@ class BmpToPngApp:
                 set(files),
                 set(result.output_paths),
             )
-            create_combined_pdf(result.output_paths, final_pdf)
+            create_combined_pdf(result.output_paths, final_pdf, overwrite=overwrite)
             self._completion_queue.put((result, final_pdf, None))
         except Exception as exc:
             self._completion_queue.put((result, final_pdf, str(exc)))
