@@ -10,7 +10,6 @@ from PIL import Image
 SUPPORTED_SUFFIXES = frozenset({".bmp", ".png"})
 
 
-
 def publish_no_overwrite(temporary_path: Path, output_path: Path) -> None:
     """Atomically publish without replacing an existing destination."""
     if os.name == "nt":
