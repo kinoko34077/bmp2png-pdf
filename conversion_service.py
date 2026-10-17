@@ -147,7 +147,7 @@ def convert_batch(
         output_key = output_path.resolve()
         reserved.add(output_key)
         try:
-            outputs.append(convert_image_to_png(input_path, output_path, compression_level, overwrite=overwrite)
+            outputs.append(convert_image_to_png(input_path, output_path, compression_level, overwrite=overwrite))
         except Exception as exc:
             reserved.discard(output_key)
             failures.append(ConversionFailure(input_path, str(exc)))
