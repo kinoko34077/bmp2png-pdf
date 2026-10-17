@@ -11,6 +11,8 @@ from reportlab.lib.pagesizes import A4, landscape, portrait
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
+from image_processing import publish_no_overwrite
+
 
 def create_combined_pdf(
     png_paths: Sequence[Path], output_path: Path, overwrite: bool = True
@@ -71,8 +73,7 @@ def create_combined_pdf(
         if overwrite:
             final_path.replace(output_path)
         else:
-            # The temporary file shares the destination filesystem; link creation is no-clobber.
-            os.link(final_path, output_path)
+            publish_no_overwrite(final_path, output_path)
         return output_path
     finally:
         reportlab_path.unlink(missing_ok=True)
