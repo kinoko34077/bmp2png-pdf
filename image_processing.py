@@ -19,6 +19,7 @@ def publish_no_overwrite(temporary_path: Path, output_path: Path) -> None:
         # POSIX rename replaces; link creation is atomic and no-clobber when supported.
         os.link(temporary_path, output_path)
 
+
 def convert_image_to_png(
     input_path: Path,
     output_path: Path,
