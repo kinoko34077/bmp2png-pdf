@@ -10,6 +10,16 @@ from PIL import Image
 SUPPORTED_SUFFIXES = frozenset({".bmp", ".png"})
 
 
+
+def publish_no_overwrite(temporary_path: Path, output_path: Path) -> None:
+    """Atomically publish without replacing an existing destination."""
+    if os.name == "nt":
+        # Windows rename fails if the destination exists and works on FAT/exFAT too.
+        os.rename(temporary_path, output_path)
+    else:
+        # POSIX rename replaces; link creation is atomic and no-clobber when supported.
+        os.link(temporary_path, output_path)
+
 def convert_image_to_png(
     input_path: Path,
     output_path: Path,
@@ -41,8 +51,7 @@ def convert_image_to_png(
         if overwrite:
             temporary_path.replace(output_path)
         else:
-            # Same-directory hard-link creation is atomic and fails if the target exists.
-            os.link(temporary_path, output_path)
+            publish_no_overwrite(temporary_path, output_path)
         return output_path
     finally:
         temporary_path.unlink(missing_ok=True)
