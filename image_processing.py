@@ -10,8 +10,22 @@ from PIL import Image
 SUPPORTED_SUFFIXES = frozenset({".bmp", ".png"})
 
 
+def publish_no_overwrite(temporary_path: Path, output_path: Path) -> None:
+    """Atomically publish without replacing an existing destination."""
+    if os.name == "nt":
+        # Windows rename fails if the destination exists and works on FAT/exFAT too.
+        os.rename(temporary_path, output_path)
+    else:
+        # POSIX rename replaces; link creation is atomic and no-clobber when supported.
+        os.link(temporary_path, output_path)
+
+
 def convert_image_to_png(
-    input_path: Path, output_path: Path, compression_level: int = 9
+    input_path: Path,
+    output_path: Path,
+    compression_level: int = 9,
+    *,
+    overwrite: bool = True,
 ) -> Path:
     """Losslessly recompress one BMP or PNG, retaining pixels and source DPI."""
     if not 0 <= compression_level <= 9:
@@ -34,11 +48,13 @@ def convert_image_to_png(
             if dpi:
                 save_options["dpi"] = dpi
             image.save(temporary_path, **save_options)
-        temporary_path.replace(output_path)
+        if overwrite:
+            temporary_path.replace(output_path)
+        else:
+            publish_no_overwrite(temporary_path, output_path)
         return output_path
-    except Exception:
+    finally:
         temporary_path.unlink(missing_ok=True)
-        raise
 
 
 def convert_bmp_to_png(input_path: Path, compression_level: int = 9) -> Path:
