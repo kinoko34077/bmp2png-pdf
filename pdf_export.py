@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import os
 import tempfile
 from pathlib import Path
@@ -7,13 +8,12 @@ from typing import Sequence
 
 from PIL import Image
 from pypdf import PdfReader, PdfWriter
-from reportlab.lib.pagesizes import A4, landscape, portrait
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 
 def create_combined_pdf(png_paths: Sequence[Path], output_path: Path) -> Path:
-    """Create one A4 page per PNG, preserving raster pixels and DPI placement."""
+    """Create one edge-to-edge PDF page per PNG, preserving raster pixels and DPI."""
     if not png_paths:
         raise ValueError("PDFに含めるPNGがありません。")
 
@@ -29,29 +29,29 @@ def create_combined_pdf(png_paths: Sequence[Path], output_path: Path) -> Path:
     os.close(final_fd)
     reportlab_path, final_path = Path(pdf_name), Path(final_name)
     try:
-        pdf = canvas.Canvas(str(reportlab_path), pagesize=A4, pageCompression=1)
+        pdf = canvas.Canvas(str(reportlab_path), pageCompression=1)
         pdf.setTitle(output_path.stem)
-        margin = 24.0
         for png_path in png_paths:
             with Image.open(png_path) as image:
                 pixel_width, pixel_height = image.size
                 dpi = image.info.get("dpi", (96, 96))
                 try:
                     dpi_x, dpi_y = float(dpi[0]), float(dpi[1])
-                    if dpi_x <= 0 or dpi_y <= 0:
+                    if (
+                        not math.isfinite(dpi_x)
+                        or not math.isfinite(dpi_y)
+                        or dpi_x <= 0
+                        or dpi_y <= 0
+                    ):
                         raise ValueError
                 except (TypeError, ValueError, IndexError):
                     dpi_x = dpi_y = 96.0
-                page_size = landscape(A4) if pixel_width > pixel_height else portrait(A4)
-                page_width, page_height = page_size
-                pdf.setPageSize(page_size)
-                natural_width, natural_height = pixel_width * 72.0 / dpi_x, pixel_height * 72.0 / dpi_y
-                scale = min(1.0, (page_width - 2 * margin) / natural_width, (page_height - 2 * margin) / natural_height)
-                draw_width, draw_height = natural_width * scale, natural_height * scale
+                page_width = pixel_width * 72.0 / dpi_x
+                page_height = pixel_height * 72.0 / dpi_y
+                pdf.setPageSize((page_width, page_height))
                 pdf.drawImage(
-                    ImageReader(image), (page_width - draw_width) / 2,
-                    (page_height - draw_height) / 2, width=draw_width, height=draw_height,
-                    preserveAspectRatio=True, anchor="c", mask="auto",
+                    ImageReader(image), 0, 0, width=page_width, height=page_height,
+                    mask="auto",
                 )
                 pdf.showPage()
         pdf.save()
