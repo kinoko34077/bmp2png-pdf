@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import errno
 import os
 import tempfile
 from pathlib import Path
@@ -17,7 +18,16 @@ def publish_no_overwrite(temporary_path: Path, output_path: Path) -> None:
         os.rename(temporary_path, output_path)
     else:
         # POSIX rename replaces; link creation is atomic and no-clobber when supported.
-        os.link(temporary_path, output_path)
+        try:
+            os.link(temporary_path, output_path)
+        except OSError as error:
+            if error.errno in {errno.EPERM, errno.ENOTSUP, errno.EOPNOTSUPP}:
+                raise OSError(
+                    error.errno,
+                    "出力先では安全な非上書き確定（ハードリンク）が使えません。別の保存先を指定してください。",
+                    str(output_path),
+                ) from error
+            raise
 
 
 def convert_image_to_png(
