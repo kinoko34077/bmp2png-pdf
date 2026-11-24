@@ -11,8 +11,12 @@ from pypdf import PdfReader, PdfWriter
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
+from image_processing import publish_no_overwrite
 
-def create_combined_pdf(png_paths: Sequence[Path], output_path: Path) -> Path:
+
+def create_combined_pdf(
+    png_paths: Sequence[Path], output_path: Path, overwrite: bool = True
+) -> Path:
     """Create one edge-to-edge PDF page per PNG, preserving raster pixels and DPI."""
     if not png_paths:
         raise ValueError("PDFに含めるPNGがありません。")
@@ -66,7 +70,10 @@ def create_combined_pdf(png_paths: Sequence[Path], output_path: Path) -> Path:
         writer.open_destination = writer.pages[0]
         with final_path.open("wb") as stream:
             writer.write(stream)
-        final_path.replace(output_path)
+        if overwrite:
+            final_path.replace(output_path)
+        else:
+            publish_no_overwrite(final_path, output_path)
         return output_path
     finally:
         reportlab_path.unlink(missing_ok=True)
