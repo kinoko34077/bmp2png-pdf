@@ -33,7 +33,7 @@ def sort_input_paths(paths: Sequence[Path]) -> list[Path]:
         resolved_key = str(path.resolve()).casefold()
         name_parts = _DIGIT_PARTS.split(path.name.casefold())
         natural = tuple(
-            (0, int(part)) if part.isdigit() else (1, part)
+            (0, int(part)) if part.isdecimal() else (1, part)
             for part in name_parts
         )
         unique.setdefault(resolved_key, (path, natural, resolved_key))

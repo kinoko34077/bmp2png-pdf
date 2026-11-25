@@ -28,8 +28,8 @@ jobs:
           architecture: x64
       - name: Install build dependencies
         run: python -m pip install -r requirements-build.txt
-      - name: Verify PNG/PDF no-overwrite behavior
-        run: python -m unittest discover -s tests -p "test_no_overwrite.py" -v
+      - name: Verify conversion regressions
+        run: python -m unittest discover -s tests -p "test_*.py" -v
       - name: Build portable folder
         shell: pwsh
         run: .\build_windows.ps1
